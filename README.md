@@ -1,4 +1,4 @@
-1. database
+1. database 数据库(基于gorm)
 - 更新说明:2021-1-16,gorm升级为v2,可使用批量插入等新特性,参见 :https://gorm.io/zh_CN/docs/changelog.html
   
 - 批量插入,gorm 文档: https://gorm.io/zh_CN/docs/create.html
@@ -48,7 +48,7 @@
     SELECT * FROM `driver` WHERE `driver`.`id` = 10001 AND `driver`.`id` = 10000 ORDER BY `driver`.`id` LIMIT 1
   
   ```
-1. logging
+2. logging 日志
 - 目标:日志只打一次,避免一个错误多次输出
 - 注意
    1. 通过errors.New()/WithStack()/Wrap()等处理的错误已包含堆栈信息,不要使用Log.Error()记录日志(会输出双份的堆栈信息,数据冗余)

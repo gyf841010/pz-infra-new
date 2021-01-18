@@ -170,7 +170,7 @@ func (log *logrusLogger) Warn(message string, fields ...Field) {
 	log.Logrus.WithFields(log.addFields(fields, false)).Warnln(message)
 }
 
-func (log *logrusLogger) Error(message string, fields ...Field) error {
+func (log *logrusLogger) ErrorOld(message string, fields ...Field) error {
 	log.Logrus.WithFields(log.addFields(fields, true)).Errorln(message)
 	return errors.New(message)
 }
@@ -193,7 +193,7 @@ func (log *logrusLogger) GetPrintLogger() PrintLogger {
 }
 
 // 已携带堆栈信息的错误,使用fmt.Sprintf("%+v",err)得到完整的错误信息输出
-func (log *logrusLogger) LogErrorHasStackInfo(err error, args ...interface{}) {
+func (log *logrusLogger) Error(err error, args ...interface{}) {
 	log.Logrus.Errorln(fmt.Sprintf("%+v", err), args)
 }
 

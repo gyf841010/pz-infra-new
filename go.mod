@@ -18,6 +18,7 @@ require (
 	github.com/hjr265/redsync.go v0.0.0-20160719150818-688f6d364b79
 	github.com/hsinhoyeh/binarydist v0.0.0-20140819060055-20248b8da9ec
 	github.com/pborman/uuid v1.2.1
+	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/sohlich/elogrus v2.0.2+incompatible

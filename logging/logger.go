@@ -15,7 +15,7 @@ type Logger interface {
 	// errors.New/WithStack/Wrap/Wrapf等可以方便地给错误带上堆栈信息,方便定位错误
 	// 已携带堆栈信息的错误,使用Error()完整的错误信息输出(实现:fmt.Sprintf("%+v",err))
 	// 未包含堆栈信息的错误请使用 ErrorOld()输出日志,会带上堆栈信息
-	Error(err error, args ...interface{})
+	Error(message string, err error, args ...interface{})
 
 	// Fatal logs a message, then calls os.Exit(1).
 	Fatal(message string, fields ...Field)

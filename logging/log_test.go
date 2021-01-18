@@ -14,8 +14,8 @@ func aTestError() error {
 func TestLogging(t *testing.T) {
 	InitLogger("test")
 	err := aTestError()
-	Log.Error("test", err)
-	Log.ErrorOld("test", WithError(err))
+	Log.ErrorWithStack("test", WithError(err))
+	Log.Error("test", WithError(err))
 
 	fmt.Println(errors.WithMessage(errors.Wrap(err, "wrap info"), "with message").Error())
 	fmt.Println(errors.Cause(

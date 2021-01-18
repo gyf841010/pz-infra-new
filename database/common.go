@@ -10,13 +10,13 @@ func SaveModelWithChan(t interface{}, isCreate bool, ch chan error) error {
 	db := GetDB()
 	if isCreate {
 		if err := db.Create(t).Error; err != nil {
-			Log.ErrorOld("Failed to Create Model in Batch Mode", With("model", t), WithError(err))
+			Log.Error("Failed to Create Model in Batch Mode", With("model", t), WithError(err))
 			ch <- err
 			return err
 		}
 	} else {
 		if err := db.Save(t).Error; err != nil {
-			Log.ErrorOld("Failed to Save Model in Batch Mode", With("model", t), WithError(err))
+			Log.Error("Failed to Save Model in Batch Mode", With("model", t), WithError(err))
 			ch <- err
 			return err
 		}
@@ -66,7 +66,7 @@ func BatchSaveModels(t interface{}, isCreate bool) error {
 func ExecSql(sql string, args ...interface{}) error {
 	db := GetDB()
 	if err := db.Exec(sql, args...).Error; err != nil {
-		Log.ErrorOld("Failed to Exec Sql", With("sql", sql), With("args", args), WithError(err))
+		Log.Error("Failed to Exec Sql", With("sql", sql), With("args", args), WithError(err))
 		return err
 	}
 	return nil
@@ -75,7 +75,7 @@ func ExecSql(sql string, args ...interface{}) error {
 func AddModel(t interface{}) error {
 	db := GetDB()
 	if err := db.Create(t).Error; err != nil {
-		Log.ErrorOld("Failed to AddModel", With("model", t), WithError(err))
+		Log.Error("Failed to AddModel", With("model", t), WithError(err))
 		return err
 	}
 	return nil

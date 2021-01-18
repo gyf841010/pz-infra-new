@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/gyf841010/pz-infra-new/errorUtil"
 	"github.com/pkg/errors"
 )
 
@@ -14,10 +15,15 @@ func aTestError() error {
 func TestLogging(t *testing.T) {
 	InitLogger("test")
 	err := aTestError()
-	Log.ErrorWithStack("test", WithError(err))
-	Log.Error("test", WithError(err))
+	Log.ErrorWithStack("my", err, "", With("with msg", "test"), With("struct", struct {
+		A string `json:"a"`
+	}{A: "some msg"}))
 
-	fmt.Println(errors.WithMessage(errors.Wrap(err, "wrap info"), "with message").Error())
-	fmt.Println(errors.Cause(
-		errors.WithMessage(errors.Wrap(err, "wrap info"), "with message")))
+	Log.Error("test", WithError(err))
+	switch t := err.(type) {
+	case *errorUtil.HError:
+		fmt.Println("custom error", t.Code(), t.Error(), t.Message, t.ResCode)
+	default:
+		fmt.Println("default", errors.Cause(err))
+	}
 }

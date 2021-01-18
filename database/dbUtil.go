@@ -27,7 +27,7 @@ func RollbackIfError(isNewTran bool, tran *gorm.DB, err error) error {
 	if isNewTran {
 		if err == nil {
 			if err = tran.Commit().Error; err != nil {
-				return Log.Error(err.Error())
+				return Log.ErrorOld(err.Error())
 			}
 		} else {
 			tran.Rollback()

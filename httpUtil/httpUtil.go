@@ -47,7 +47,8 @@ func PostJson(url string, header map[string]string, body interface{}) ([]byte, e
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		return nil, err
 	}
 
 	return respBody, nil
@@ -92,7 +93,8 @@ func PostXmlWithCert(url string, body string, cacrtFile, crtFile, keyFile string
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		return nil, err
 	}
 
 	return respBody, nil
@@ -121,7 +123,8 @@ func GetJson(url string, header map[string]string) ([]byte, error) {
 
 	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		return nil, err
 	}
 
 	return respBody, nil

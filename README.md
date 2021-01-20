@@ -54,19 +54,19 @@
    1. 通过errors.New()/WithStack()/Wrap()等处理的错误已包含堆栈信息,不要使用Log.Error()记录日志(会输出双份的堆栈信息,数据冗余)
    ```
    e := errors.New("test_error")		
-   Log.LogErrorHasStackInfo(e, "test_args")
+   Log.ErrorWithStack(e, "test_args")
 
    // 会输出冗余信息
    Log.Error("t", WithError(e))
    ```
-- 样例 1).结合 github.com/pkg/errors 包实现堆
+- 样例 1).结合 git .com/pkg/errors 包实现堆
     ```
     // contrller 记录下层返回的错误到日志
     func (controller *Controller)Add(){
         ....
         resp,err:=service.Add(req)
         if err!=nil {
-            Log.LogErrorHasStackInfo(err,"错误描述,可选")
+            Log.ErrorWithStack(err,"错误描述,可选")
         }
     }
 
@@ -79,7 +79,7 @@
         //1)如果错误需要在这一层吞掉不返回给客户端,需要输出到日志
         if err!=nil{
             ...
-            Log.LogErrorHasStackInfo(err,"错误描述,可选")
+            Log.ErrorWithStack(err,"错误描述,可选")
             ...
 
             return resp,nil
@@ -99,3 +99,74 @@
     }
     ```
 
+
+
+- 日志记录样例
+  1. 说明:$GOPATH不是真实路径(为方便说明做了处理),实际日志会输出实际路径
+  2. 代码
+   ```
+   package logging
+
+    import (
+    	"fmt"
+    	"testing"
+
+    	"github.com/gyf841010/pz-infra-new/errorUtil"
+    	"github.com/pkg/errors"
+    )
+
+    func aTestError() error {
+    	err := errors.New("test_error")
+    	return err
+    }
+    func TestLogging(t *testing.T) {
+    	InitLogger("test")
+    	err := aTestError()
+    	// 3. 使用Log.ErrorWithStack()输出带堆栈信息的错误
+        Log.ErrorWithStack("my", err, "", With("with msg", "test"), With("struct", struct   {
+    		A string `json:"a"`
+    	}{A: "some msg"}))
+
+        // 4. 使用Log.Error()输出带堆栈信息错误
+    	Log.Error("test", WithError(err))
+    }
+   ```
+  3. 使用Log.ErrorWithStack()输出带堆栈信息的错误
+  ```
+      ERROR[2021-01-18T20:42:41+08:00] my test_error
+    github.com/gyf841010/pz-infra-new/logging.aTestError
+    	$GOPATH/pz-infra-new/logging/log_test.go:12
+    github.com/gyf841010/pz-infra-new/logging.TestLogging
+    	$GOPATH/pz-infra-new/logging/log_test.go:17
+    testing.tRunner
+    	/usr/local/go/src/testing/testing.go:1123
+    runtime.goexit
+    	/usr/local/go/src/runtime/asm_amd64.s:1374 [ {with msg test} {struct {some msg}}] 
+  ```
+  4. 使用Log.Error()输出带堆栈信息错误,会输出冗余信息(Error方法实现中有获取堆栈信息的过程,这里输出,2遍堆栈信息)
+   ```
+       ERROR[2021-01-18T20:42:42+08:00] test                                            error=test_error
+    github.com/gyf841010/pz-infra-new/logging.aTestError
+    	$GOPATH/pz-infra-new/logging/log_test.go:12
+    github.com/gyf841010/pz-infra-new/logging.TestLogging
+    	$GOPATH/pz-infra-new/logging/log_test.go:17
+    testing.tRunner
+    	/usr/local/go/src/testing/testing.go:1123
+    runtime.goexit
+    	/usr/local/go/src/runtime/asm_amd64.s:1374 component=test stacktrace=goroutine 21   [running]:
+    github.com/gyf841010/pz-infra-new/logging.takeStacktrace(0x419f00, 0x0, 0x0)
+    	$GOPATH/pz-infra-new/logging/field.go:54 +0x91
+    github.com/gyf841010/pz-infra-new/logging.Stacktrace(0x0, 0x0, 0x0, 0x0)
+    	$GOPATH/pz-infra-new/logging/field.go:48 +0x4d
+    github.com/gyf841010/pz-infra-new/logging.(*logrusLogger).addFields(0xc000296120,   0xc000203aa0, 0x1, 0x1, 0xc000203a01, 0x0)
+    	$GOPATH/pz-infra-new/logging/logrus.go:128 +0x325
+    github.com/gyf841010/pz-infra-new/logging.(*logrusLogger).Error(0xc000296120,   0xdf96f9, 0x4, 0xc000203aa0, 0x1, 0x1, 0x0, 0x0)
+    	$GOPATH/pz-infra-new/logging/logrus.go:174 +0x77
+    github.com/gyf841010/pz-infra-new/logging.TestLogging(0xc000294300)
+    	$GOPATH/pz-infra-new/logging/log_test.go:22 +0x464
+    testing.tRunner(0xc000294300, 0xe2c300)
+    	/usr/local/go/src/testing/testing.go:1123 +0x1a3
+    created by testing.(*T).Run
+    	/usr/local/go/src/testing/testing.go:1168 +0x648
+     fileFunc=log_test.go:22:TestLogging
+   ```

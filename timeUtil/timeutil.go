@@ -316,3 +316,15 @@ func Between(now, from, to int64) bool {
 	}
 	return false
 }
+
+// dateStr格式 2006-01-02 15:04:05
+func ConvertTimeStrToInt64(dateStr string) int64 {
+	t, _ := time.ParseInLocation(TIME_FORMAT, dateStr, GMT8())
+	return t.UnixNano() / 1e6
+}
+
+// dateStr格式 2016-01-31
+func ConvertDateStrToInt64(dateStr string) int64 {
+	t, _ := time.ParseInLocation(DATE_FORMAT, dateStr, GMT8())
+	return t.UnixNano() / 1e6
+}

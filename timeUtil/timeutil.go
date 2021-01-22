@@ -78,6 +78,10 @@ func MicroToDateTime(unix int64) string {
 	return ConvertInt64ToTimeInLocation(unix).Format(TIME_FORMAT)
 }
 
+func MicroToMinuteTime(unix int64) string {
+	return ConvertInt64ToTimeInLocation(unix).Format(MINUTE_TIME_FORMAT)
+}
+
 func UnixToDateTime(unix int64, loc *time.Location) string {
 	time.Local = loc
 	return time.Unix(unix, 0).Format(TIME_FORMAT)

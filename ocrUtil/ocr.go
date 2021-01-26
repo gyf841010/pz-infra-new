@@ -17,7 +17,7 @@ import (
 	"github.com/chenqinghe/baidu-ai-go-sdk/vision/ocr"
 	"github.com/go-resty/resty/v2"
 	. "github.com/gyf841010/pz-infra-new/logging"
-	timeutil "github.com/gyf841010/pz-infra-new/timeUtil"
+	timeutil "github.com/gyf841010/pz-infra-new/timeutil"
 )
 
 const (

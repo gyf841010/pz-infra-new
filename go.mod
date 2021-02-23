@@ -18,6 +18,7 @@ require (
 	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-resty/resty/v2 v2.4.0
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/h2non/filetype v1.1.1
 	github.com/hjr265/redsync.go v0.0.0-20160719150818-688f6d364b79
 	github.com/hsinhoyeh/binarydist v0.0.0-20140819060055-20248b8da9ec
 	github.com/hsinhoyeh/gobzip v0.0.0-20180116012146-6428c5b6c0a4 // indirect

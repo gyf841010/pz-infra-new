@@ -14,6 +14,7 @@ import (
 
 	"github.com/gyf841010/pz-infra-new/commonUtil"
 	"github.com/gyf841010/pz-infra-new/log"
+	"github.com/h2non/filetype"
 
 	"github.com/astaxie/beego"
 )
@@ -197,6 +198,21 @@ func GetFileType(fSrc []byte) string {
 		return true
 	})
 	return fileType
+}
+
+// 通过文件头判断文件类型
+// 实现:github.com/h2non/filetype
+// 不支持txt格式,纯文本无文件头 2021-2-23
+func GetFileTypeNew(fSrc []byte) string {
+	fileType, err := filetype.Match(fSrc)
+	if err != nil {
+		return ""
+	}
+
+	if fileType == filetype.Unknown || fileType.Extension == "" {
+		return ""
+	}
+	return fileType.Extension
 }
 
 func GetFileKey(fSrc []byte) string {

@@ -231,3 +231,20 @@ func GetFileKey(fSrc []byte) string {
 
 	return fileKey
 }
+
+func GetFileKeyNew(fSrc []byte) string {
+	datePrefix, _ := beego.AppConfig.Bool("datePrefixFlag")
+	fileType := GetFileTypeNew(fSrc)
+	if fileType == "" {
+		fileType = "png"
+	}
+
+	var fileKey string
+	if datePrefix {
+		fileKey = fmt.Sprintf("%d/%d/", time.Now().Year(), time.Now().Month()) + commonUtil.UUID() + "." + fileType
+	} else {
+		fileKey = commonUtil.UUID() + "." + fileType
+	}
+
+	return fileKey
+}

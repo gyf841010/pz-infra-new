@@ -11,19 +11,20 @@ import (
 )
 
 const (
-	DATE_FORMAT       = "2006-01-02"
-	TIME_FORMAT       = "2006-01-02 15:04:05"
-	SPORT_UPDATE_TIME = 5
-	WEEK_LEN          = 7 // 一周长度
-	HOUR_SECOND       = 3600
-	MIN5_MIRCO        = 5 * 60 * 1000
-	MIN1_MIRCO        = 1 * 60 * 1000
-	MIN_SECOND        = 1 * 60
-	DAY_SECOND        = 24 * 3600
-	HOUR_MIRCO        = 60 * 60 * 1000
-	DAY_MICRO         = 24 * 60 * 60 * 1000
-	FIFTEEN_MINS      = 15 * 60 * 1000
-	TEN_SECOND        = 10
+	DATE_FORMAT        = "2006-01-02"
+	TIME_FORMAT        = "2006-01-02 15:04:05"
+	MINUTE_TIME_FORMAT = "2006-01-02 15:04"
+	SPORT_UPDATE_TIME  = 5
+	WEEK_LEN           = 7 // 一周长度
+	HOUR_SECOND        = 3600
+	MIN5_MIRCO         = 5 * 60 * 1000
+	MIN1_MIRCO         = 1 * 60 * 1000
+	MIN_SECOND         = 1 * 60
+	DAY_SECOND         = 24 * 3600
+	HOUR_MIRCO         = 60 * 60 * 1000
+	DAY_MICRO          = 24 * 60 * 60 * 1000
+	FIFTEEN_MINS       = 15 * 60 * 1000
+	TEN_SECOND         = 10
 )
 
 func CurrentUnix() int64 {
@@ -75,6 +76,10 @@ func MicroToDate(unix int64) string {
 
 func MicroToDateTime(unix int64) string {
 	return ConvertInt64ToTimeInLocation(unix).Format(TIME_FORMAT)
+}
+
+func MicroToMinuteTime(unix int64) string {
+	return ConvertInt64ToTimeInLocation(unix).Format(MINUTE_TIME_FORMAT)
 }
 
 func UnixToDateTime(unix int64, loc *time.Location) string {
@@ -320,6 +325,12 @@ func Between(now, from, to int64) bool {
 // dateStr格式 2006-01-02 15:04:05
 func ConvertTimeStrToInt64(dateStr string) int64 {
 	t, _ := time.ParseInLocation(TIME_FORMAT, dateStr, GMT8())
+	return t.UnixNano() / 1e6
+}
+
+// dateStr格式 2006-01-02 15:04
+func ConvertMinuteTimeStrToInt64(dateStr string) int64 {
+	t, _ := time.ParseInLocation(MINUTE_TIME_FORMAT, dateStr, GMT8())
 	return t.UnixNano() / 1e6
 }
 

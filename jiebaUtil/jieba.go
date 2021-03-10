@@ -8,6 +8,10 @@ import (
 
 var seg jiebago.Segmenter
 
+func init() {
+	seg.LoadDictionary("dict.txt")
+}
+
 func chanToStrs(ch <-chan string) []string {
 	var result []string
 	for word := range ch {

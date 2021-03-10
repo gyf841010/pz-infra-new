@@ -18,6 +18,7 @@ require (
 	github.com/go-gomail/gomail v0.0.0-20160411212932-81ebce5c23df
 	github.com/go-resty/resty/v2 v2.4.0
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gopherjs/gopherjs v0.0.0-20190910122728-9d188e94fb99 // indirect
 	github.com/hjr265/redsync.go v0.0.0-20160719150818-688f6d364b79
 	github.com/hsinhoyeh/binarydist v0.0.0-20140819060055-20248b8da9ec
 	github.com/hsinhoyeh/gobzip v0.0.0-20180116012146-6428c5b6c0a4 // indirect
@@ -34,6 +35,7 @@ require (
 	github.com/tealeg/xlsx v1.0.5
 	github.com/tinylib/msgp v1.1.4 // indirect
 	github.com/twpayne/go-polyline v1.0.1
+	github.com/wangbin/jiebago v0.3.2
 	github.com/ziutek/mymysql v1.5.4
 	golang.org/x/crypto v0.0.0-20201012173705-84dcc777aaee // indirect
 	gopkg.in/alexcesaro/quotedprintable.v3 v3.0.0-20150716171945-2caba252f4dc // indirect

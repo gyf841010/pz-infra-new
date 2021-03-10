@@ -19,6 +19,7 @@ require (
 	github.com/go-resty/resty/v2 v2.4.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gopherjs/gopherjs v0.0.0-20190910122728-9d188e94fb99 // indirect
+	github.com/h2non/filetype v1.1.1
 	github.com/hjr265/redsync.go v0.0.0-20160719150818-688f6d364b79
 	github.com/hsinhoyeh/binarydist v0.0.0-20140819060055-20248b8da9ec
 	github.com/hsinhoyeh/gobzip v0.0.0-20180116012146-6428c5b6c0a4 // indirect

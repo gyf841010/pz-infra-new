@@ -30,10 +30,12 @@ func InitConfigFile(configFileName string) {
 	//dbString := "root:b553e6e21a8ff@tcp(localhost:3306)/pz_base?charset=utf8mb4&parseTime=True"
 	dbString := beego.AppConfig.String("db")
 	log.Debug("DB String is %s", dbString)
-	database.InitDB(dbString, nil)
 	if Log == nil {
 		InitLogger("testing")
 	}
+	// init db with logger to output sql in test mode
+	database.InitDB(dbString, Log)
+
 	confUtil.LoadLocaleConfig()
 	// Initialized language type list.
 

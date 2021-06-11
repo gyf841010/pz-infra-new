@@ -197,6 +197,10 @@ func (log *logrusLogger) ErrorWithStack(message string, err interface{}, args ..
 	log.Logrus.Errorln(message, fmt.Sprintf("%+v", err), args)
 }
 
+func (log *logrusLogger) ErrorWithStackf(err error, format string, args ...interface{}) {
+	log.Logrus.Errorf(format+" Error:%+v ", args, err)
+}
+
 type printLogger struct {
 	Logrus *logrus.Logger
 }

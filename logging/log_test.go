@@ -12,6 +12,7 @@ func aTestError() error {
 	err := errors.New("test_error")
 	return err
 }
+
 func TestLogging(t *testing.T) {
 	InitLogger("test")
 	err := aTestError()
@@ -26,4 +27,5 @@ func TestLogging(t *testing.T) {
 	default:
 		fmt.Println("default", errors.Cause(err))
 	}
+	Log.ErrorWithStackf(err, "%v", struct{ str string }{"test_error_f"})
 }

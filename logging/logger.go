@@ -27,6 +27,7 @@ type Logger interface {
 	// 已携带堆栈信息的错误,使用Error()完整的错误信息输出(实现:fmt.Sprintf("%+v",err))
 	// 未包含堆栈信息的错误请使用 ErrorOld()输出日志,会带上堆栈信息
 	ErrorWithStack(message string, err interface{}, args ...interface{})
+	ErrorWithStackf(err error, format string, args ...interface{})
 }
 
 type PrintLogger interface {

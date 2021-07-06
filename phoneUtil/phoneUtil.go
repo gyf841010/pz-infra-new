@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	MOBILE_VALID_REGEX  = "^(\\+)?(\\d){10,}$"
+	MOBILE_VALID_REGEX  = "^(\\+)?(\\d){11,}$"
 	DEFAULT_MOBILE_CODE = "1"
 	MOBILE_PLUS_SYMBOL  = "+"
 )

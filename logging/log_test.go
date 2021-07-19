@@ -27,5 +27,7 @@ func TestLogging(t *testing.T) {
 	default:
 		fmt.Println("default", errors.Cause(err))
 	}
-	Log.ErrorWithStackf(err, "%v", struct{ str string }{"test_error_f"})
+	Log.Info("-------------------\n")
+	s := struct{ str string }{"test_error_f"}
+	Log.ErrorWithStackf(err, "结构体%+v,数字:%d", s, 1111111111111111)
 }

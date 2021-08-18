@@ -77,7 +77,7 @@ func InitLogger(componentName string) Logger {
 		hooks = append(hooks, fluentdHook)
 	}
 	logLevel := logrus.InfoLevel
-	if beego.BConfig.RunMode == "dev" {
+	if beego.BConfig.RunMode == "dev" || beego.BConfig.RunMode == "test" {
 		logLevel = logrus.DebugLevel
 	}
 	logger, err := GetLogger(Logrus, &LogrusOption{

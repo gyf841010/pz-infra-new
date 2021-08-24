@@ -61,21 +61,27 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 	elapsed := time.Since(begin)
 	sql, _ := fc()
 	fields := logrus.Fields{}
+
 	if l.SourceField != "" {
 		fields[l.SourceField] = utils.FileWithLineNum()
 	}
+
+	// 错误日志
 	if err != nil && !(errors.Is(err, gorm.ErrRecordNotFound)) {
 		fields[logrus.ErrorKey] = err
 		l.logger.WithContext(ctx).WithFields(fields).Errorf("%s [%s]", sql, elapsed)
 		return
 	}
 
+	// 慢日志
 	if l.SlowThreshold != 0 && elapsed > l.SlowThreshold {
 		l.logger.WithContext(ctx).WithFields(fields).Warnf("%s [%s]", sql, elapsed)
 		return
 	}
 
-	l.logger.WithContext(ctx).WithFields(fields).Debugf("%s [%s]", sql, elapsed)
+	// 方便定位问题
+	// gorm 执行sql,打印 修改为info级别,原为debug
+	l.logger.WithContext(ctx).WithFields(fields).Infof("%s [%s]", sql, elapsed)
 }
 
 func InitDB(connectString string, infraLogger logging.Logger) error {

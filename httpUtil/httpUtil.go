@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
-	"time"
 
 	. "github.com/gyf841010/pz-infra-new/logging"
 )
@@ -113,7 +112,7 @@ func GetJson(url string, header map[string]string) ([]byte, error) {
 		}
 	}
 
-	client := &http.Client{Timeout: 2 * time.Second}
+	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		Log.Error("occur error when get response, ", WithError(err))

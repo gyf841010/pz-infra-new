@@ -53,6 +53,40 @@ func PostJson(url string, header map[string]string, body interface{}) ([]byte, e
 	return respBody, nil
 }
 
+func PostForm(url string, header map[string]string, formStr string) ([]byte, error) {
+	if formStr != "" {
+		Log.Debug("request form", With("requestForm", formStr))
+	}
+
+	req, err := http.NewRequest(http.MethodPost, url, strings.NewReader(formStr))
+	if err != nil {
+		Log.Error("occur error when new http request, ", WithError(err))
+		return nil, err
+	}
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	if len(header) > 0 {
+		for k, v := range header {
+			req.Header.Set(k, v)
+		}
+	}
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		Log.Error("occur error when get response, ", WithError(err))
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	respBody, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		Log.Error("Failed to read response body from HTTP Request", With("url", url), WithError(err))
+		return nil, err
+	}
+
+	return respBody, nil
+}
+
 func PostXmlWithCert(url string, body string, cacrtFile, crtFile, keyFile string) ([]byte, error) {
 	pool := x509.NewCertPool()
 	caCrt, err := ioutil.ReadFile(cacrtFile)

@@ -12,6 +12,7 @@ import (
 
 const (
 	DATE_FORMAT        = "2006-01-02"
+	DATE_FORMAT_EX     = "20060102"
 	TIME_FORMAT        = "2006-01-02 15:04:05"
 	MINUTE_TIME_FORMAT = "2006-01-02 15:04"
 	SPORT_UPDATE_TIME  = 5
@@ -337,5 +338,11 @@ func ConvertMinuteTimeStrToInt64(dateStr string) int64 {
 // dateStr格式 2016-01-31
 func ConvertDateStrToInt64(dateStr string) int64 {
 	t, _ := time.ParseInLocation(DATE_FORMAT, dateStr, GMT8())
+	return t.UnixNano() / 1e6
+}
+
+// dateStr格式 20160131
+func ConvertDateStrExToInt64(dateStr string) int64 {
+	t, _ := time.ParseInLocation(DATE_FORMAT_EX, dateStr, GMT8())
 	return t.UnixNano() / 1e6
 }

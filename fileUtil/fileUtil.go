@@ -232,11 +232,28 @@ func GetFileKey(fSrc []byte) string {
 	return fileKey
 }
 
-func GetFileKeyNew(fSrc []byte) string {
+/**
+ * @description: 生成文件oss key
+ * @param {[]byte} fSrc 文件内容
+ * @param {...string} fileTypes,文件类型(filetype失败xlsx文件类型还是容易错误,修改函数,支持传入文件类型,对于知道类型的场景优化)
+ * @return {*} 文件oss key
+ */
+func GetFileKeyNew(fSrc []byte, fileTypes ...string) string {
 	datePrefix, _ := beego.AppConfig.Bool("datePrefixFlag")
-	fileType := GetFileTypeNew(fSrc)
+	fileType := ""
+	if len(fileTypes) > 0 {
+		for _, item := range fileTypes {
+			if item != "" {
+				fileType = item
+				break
+			}
+		}
+	}
 	if fileType == "" {
-		fileType = "png"
+		fileType = GetFileTypeNew(fSrc)
+		if fileType == "" {
+			fileType = "png"
+		}
 	}
 
 	var fileKey string

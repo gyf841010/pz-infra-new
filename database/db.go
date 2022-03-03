@@ -81,7 +81,8 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 
 	// 方便定位问题
 	// gorm 执行sql,打印 修改为info级别,原为debug
-	l.logger.WithContext(ctx).WithFields(fields).Infof("%s [%s]", sql, elapsed)
+	// 关闭线上日志 2022=03-03
+	l.logger.WithContext(ctx).WithFields(fields).Debugf("%s [%s]", sql, elapsed)
 }
 
 func InitDB(connectString string, infraLogger logging.Logger) error {

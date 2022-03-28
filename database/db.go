@@ -14,6 +14,7 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"
+	"gorm.io/plugin/dbresolver"
 )
 
 var (
@@ -131,4 +132,20 @@ func GetDBWithSession(session *gorm.Session) *gorm.DB {
 
 func SetDB(db *gorm.DB) {
 	globalDB = db
+}
+
+// 显示指定,在从库查询数据
+func Read(dbs ...*gorm.DB) *gorm.DB {
+	if len(dbs) > 0 {
+		return GetNonTransactionDatabases(dbs).Clauses(dbresolver.Read)
+	}
+	return GetDB().Clauses(dbresolver.Read)
+}
+
+// 显示指定,在主库读写数据
+func Write(dbs ...*gorm.DB) *gorm.DB {
+	if len(dbs) > 0 {
+		return GetNonTransactionDatabases(dbs).Clauses(dbresolver.Write)
+	}
+	return GetDB().Clauses(dbresolver.Write)
 }

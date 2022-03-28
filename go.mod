@@ -45,4 +45,5 @@ require (
 	gopkg.in/olivere/elastic.v5 v5.0.86
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.11
+	gorm.io/plugin/dbresolver v1.1.0
 )

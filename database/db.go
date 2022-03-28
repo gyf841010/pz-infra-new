@@ -86,7 +86,14 @@ func (l *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 	l.logger.WithContext(ctx).WithFields(fields).Debugf("%s [%s]", sql, elapsed)
 }
 
-func InitDB(connectString string, infraLogger logging.Logger) error {
+/** 初始化数据库连接,支持传入从库地址,实现读写分离
+ * @description:
+ * @param {string} connectString 主库地址
+ * @param {logging.Logger} infraLogger log组件实现
+ * @param {...string} slaveDSN 从库地址
+ * @return {*}
+ */
+func InitDB(connectString string, infraLogger logging.Logger, slaveDSN ...string) error {
 	var gormlog logger.Interface
 	if infraLogger != nil {
 		gormlog = &GormLogger{
@@ -105,6 +112,26 @@ func InitDB(connectString string, infraLogger logging.Logger) error {
 		log.Errorf("init db error with url %s failed: %s", connectString, err.Error())
 		panic(err)
 	}
+
+	if len(slaveDSN) > 0 {
+		dbs := []gorm.Dialector{}
+		for _, item := range slaveDSN {
+			dbs = append(dbs, mysql.Open(item))
+		}
+
+		err = gormDB.Use(dbresolver.Register(
+			dbresolver.Config{
+				//Sources:  []gorm.Dialector{mysql.Open(...)}, // 主库
+				Replicas: dbs, //从库
+				// sources/replicas load balancing policy //负载均衡策略
+				Policy: dbresolver.RandomPolicy{},
+			},
+		))
+		if err != nil {
+			return err
+		}
+	}
+
 	gormDB.Logger.LogMode(logger.Info)
 	SetDB(gormDB)
 	return err

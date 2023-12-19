@@ -3,12 +3,14 @@ package database
 import (
 	"context"
 	"errors"
+	"strconv"
 	"time"
 
 	"github.com/gyf841010/pz-infra-new/log"
 	"github.com/gyf841010/pz-infra-new/logging"
 	"github.com/sirupsen/logrus"
 
+	"github.com/astaxie/beego"
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -146,8 +148,15 @@ func LogMode(level logger.LogLevel) {
 // 通过 NewDB 选项创建一个不带之前条件的新 DB,不受上一条执行语句携带的Statement影响
 // 参考: https://gorm.io/zh_CN/docs/session.html#NewDB
 func GetDB() *gorm.DB {
+	strTimeOut := beego.AppConfig.String("DB_SESSION_TIMEOUT")
+	timeOut := 30
+	if strTimeOut != "" {
+		timeOut, _ = strconv.Atoi(strTimeOut)
+	}
+	ctx, _ := context.WithTimeout(context.Background(), time.Duration(timeOut)*time.Second)
 	return globalDB.Session(&gorm.Session{
-		NewDB: true,
+		NewDB:   true,
+		Context: ctx,
 	})
 }
 

@@ -104,17 +104,14 @@ var GetObject = func(key string, value interface{}) (err error) {
 		return err
 	}
 
-	Log.Debug("redisUtil GetObject v:", With("object", v))
-
 	if err := redis.ScanStruct(v, value); err != nil {
 		Log.Error("Redist Util Error for getting", With("key", key), WithError(err))
 		return err
 	}
-	Log.Debug("redisUtil GetObject value:", With("value", value))
 	return nil
 }
 
-//设置key多少秒后超时
+// 设置key多少秒后超时
 func Expire(key string, seconds int) error {
 	conn := getPool().Get()
 	defer conn.Close()
@@ -238,8 +235,8 @@ func GetKeysByPrefix(prefix string) ([]string, error) {
 	return keys, nil
 }
 
-//往redis里面插入键值，如果键已存在，返回False，不执行
-//如果键不存在，插入键值,返回成功
+// 往redis里面插入键值，如果键已存在，返回False，不执行
+// 如果键不存在，插入键值,返回成功
 func SetStringIfNotExist(key, value string, expire int) (bool, error) {
 	conn := getPool().Get()
 	defer conn.Close()
@@ -302,7 +299,6 @@ func GetValue(key string, value interface{}) (err error) {
 		Log.Error("redis: scan error", With("key", key), WithError(err))
 		return err
 	}
-	Log.Debug("redis: get success", With("key", key))
 	return nil
 }
 
@@ -342,7 +338,6 @@ func SetValue(key string, value interface{}, seconds ...int) (err error) {
 		Log.Error("redis: set error ", With("key", key), WithError(err))
 		return err
 	}
-	Log.Debug("redis: set success", With("key", key))
 	return nil
 }
 
@@ -397,7 +392,6 @@ func SetStrings(key string, ss []string, seconds ...int) error {
 			return err
 		}
 	}
-	Log.Debug("redis: SetStrings success", With("key", key))
 	return nil
 }
 
@@ -413,7 +407,6 @@ func GetStrings(key string) ([]string, error) {
 		Log.Error("redis: SMEMBERS Error ", With("key", key), WithError(err))
 		return nil, err
 	}
-	Log.Debug("redis: GetStrings success", With("key", key))
 	return ss, nil
 }
 
@@ -430,11 +423,10 @@ func Incr(key string) (*int, error) {
 		Log.Error("redisUtil INCR error:", WithError(err))
 		return nil, err
 	}
-	Log.Debug("redis: Incr success", With("key", key), With("id", id))
 	return &id, nil
 }
 
-//SET if Not exists
+// SET if Not exists
 func SetValueNX(key string, value interface{}, seconds ...int) (err error) {
 	if Exists(key) {
 		return nil
@@ -472,11 +464,10 @@ func SetValueNX(key string, value interface{}, seconds ...int) (err error) {
 		Log.Error("redis: set error ", With("key", key), WithError(err))
 		return err
 	}
-	Log.Debug("redis: set success", With("key", key))
 	return nil
 }
 
-//SET Hash string
+// SET Hash string
 func SetHashStringWithExpire(key, field, value string, seconds ...int) (err error) {
 	if len(key) == 0 {
 		return errKeyIsBlank
@@ -486,27 +477,22 @@ func SetHashStringWithExpire(key, field, value string, seconds ...int) (err erro
 	defer conn.Close()
 
 	if err = conn.Send("HSET", key, field, value); err != nil {
-		Log.Error("redis: Send Error", WithError(err))
 		return err
 	}
 
 	if err = conn.Flush(); err != nil {
-		Log.Error("redis: Flush Error", WithError(err))
 		return err
 	}
 	_, err = conn.Do("")
 	if err != nil {
-		Log.Error("redis: HSET %s %v", With("key", key), With("field", field), With("value", value), WithError(err))
 		return err
 	}
 	if len(seconds) > 0 {
 		_, err = conn.Do("EXPIRE", key, seconds[0])
 		if err != nil {
-			Log.Error("redis: EXPIRE Key", With("key", key), With("seconds", seconds[0]), WithError(err))
 			return err
 		}
 	}
-	Log.Debug("redis: HSET success", With("key", key), With("field", field), With("value", value))
 	return nil
 }
 
@@ -519,14 +505,13 @@ func GetHashStrings(key string) ([]string, error) {
 	defer conn.Close()
 	ss, err := redis.Strings(conn.Do("HGETALL", key))
 	if err != nil {
-		Log.Error("redis: HGETALL Error ", With("key", key), WithError(err))
 		return nil, err
 	}
-	Log.Debug("redis: GetHashStrings success", With("key", key), With("ss", ss))
+
 	return ss, nil
 }
 
-//GET Hash string
+// GET Hash string
 func GetHashString(key, field string) (string, error) {
 	conn := getPool().Get()
 	defer conn.Close()
@@ -544,7 +529,6 @@ func LpushString(key, value string) error {
 	conn := getPool().Get()
 	defer conn.Close()
 	if _, err := do(conn, "LPUSH", key, value); err != nil {
-		Log.Error("redisUtil Lpush Object error:", WithError(err))
 		return err
 	}
 	return nil
